@@ -13,6 +13,7 @@ const phoneInput = 'input[id=\'1-phone\']';
 const submitButton = '.auth0-label-submit';
 
 const defaultPassword = 'Qwerty!23';
+const extendedDefaultTimeout = 15000;
 
 
 function randomTextWithNumbers(length) {
@@ -33,7 +34,6 @@ function randomCharacters(length, characters) {
   return result;
 }
 
-
 describe('Register new user', () => {
   beforeEach(() => {
 
@@ -45,13 +45,13 @@ describe('Register new user', () => {
 
   it('Open Registration Page and check form', function () {
     cy.visit('http://katanamrp.com/');
-    cy.get(registerButtonTextLocator, { timeout: 10000 }).should('be.visible');
+    cy.get(registerButtonTextLocator, { timeout: extendedDefaultTimeout }).should('be.visible');
     cy.get(registerButtonTextLocator).should('have.text', 'Start a free 14-day trial*');
 
     cy.get(registerButtonTextLocator).click();
     cy.get
     //cy.get(loading).should('not.exist');
-    cy.get(registerForm, { timeout: 10000 }).should('be.visible');
+    cy.get(registerForm, { timeout: extendedDefaultTimeout }).should('be.visible');
     
 
     cy.get(registerPageTitleLocator).find('h3').should('be.visible');
@@ -89,10 +89,10 @@ describe('Register new user', () => {
     cy.get(phoneInput).type(randomNumbers(10));
 
     cy.get(submitButton).click();
-    //cy.get(loading).should('not.exist');
-    cy.get(registerForm, { timeout: 10000 }).should('not.exist');
+    cy.get(loading, { timeout: extendedDefaultTimeout }).should('not.exist');
+    cy.get(registerForm, { timeout: extendedDefaultTimeout }).should('not.exist');
 
-    cy.get('appcues-container[class*=ontop]', { timeout: 15000 }).should('be.visible');
+    cy.get('appcues-container[class*=ontop]', { timeout: extendedDefaultTimeout }).should('be.visible');
 
   });
 });
