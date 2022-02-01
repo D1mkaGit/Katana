@@ -1,0 +1,16 @@
+{
+  "name": "qatesttask",
+  "version": "1.0.0",
+  "description": "QA position Test task",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "cypress": "^9.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:open": "cypress open"
+  },
+  "author": "D1mka",
+  "license": "ISC"
+}
