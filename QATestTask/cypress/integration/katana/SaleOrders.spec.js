@@ -84,7 +84,7 @@ describe('Using customers on Sales order', () => {
         });
 
         // enter existing address
-        enterTextToInput(cy.get('input[name="line1"]'), "7 Peerti");
+        enterTextToInput(cy.get('input[name="line1"]'), "7 Peetri");
         checkInputForValue('input[name="line1"]', "7 Peerti");
         cy.get('li[role="option"]').first().click({ force: true });
 
