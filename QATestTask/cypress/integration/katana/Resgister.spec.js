@@ -90,7 +90,7 @@ describe('Register new user', () => {
 
   });
 
-  // TODO: need to solve problem with access to the inframe objects
+  // TODO: need to solve problem with access to the inframe objects, after that next test can be finished
 
   // const getIframeDocument = () => {
   //   return cy
