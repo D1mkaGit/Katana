@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "cy:run-regTestHeadless": "cypress run --headless --spec cypress/integration/katana/Resgister.spec.js" 
+    "cy:run-regTestHeadless": "cypress run --headless --spec cypress/integration/katana/Resgister.spec.js",
+    "cy:run-saleTestHeadless": "cypress run --headless --spec cypress/integration/katana/SaleOrders.spec.js" 
   },
   "author": "D1mka",
   "license": "ISC"

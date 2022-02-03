@@ -1,20 +1,7 @@
-const loading = '.auth0-loading-container .auth0-loading';
-const registerForm = 'form[class=auth0-lock-widget]';
-const registerButtonTextLocator = '.hero__cta > .button > .button__inner > .button__text';
-const registerPageTitleLocator = '.register__title';
-
-const emailInput = 'input[id=\'1-email\']';
-const passwordInput = 'input[name=\'password\']';
-
-const fNameInput = 'input[id=\'1-first_name\']';
-const lNameInput = 'input[id=\'1-last_name\']';
-const companyInput = 'input[id=\'1-company\']';
-const phoneInput = 'input[id=\'1-phone\']';
-const submitButton = '.auth0-label-submit';
+import LoginPage from "../PageObject/LoginPage";
+import RegistrationPage from "../PageObject/RegistrationPage"
 
 const defaultPassword = 'Qwerty!23';
-const extendedDefaultTimeout = 15000;
-
 
 function randomTextWithNumbers(length) {
   return randomCharacters(length, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
@@ -34,65 +21,106 @@ function randomCharacters(length, characters) {
   return result;
 }
 
+function enterTextToInput(input, text) {
+  input
+      .click()
+      .clear()
+      .type(text);
+}
+
 describe('Register new user', () => {
-  beforeEach(() => {
 
-  })
-
-  afterEach(() => {
-
-  })
+  const registerPage = new RegistrationPage();
 
   it('Open Registration Page and check form', function () {
-    cy.visit('http://katanamrp.com/');
-    cy.get(registerButtonTextLocator, { timeout: extendedDefaultTimeout }).should('be.visible');
-    cy.get(registerButtonTextLocator).should('have.text', 'Start a free 14-day trial*');
+    registerPage.navigate();
 
-    cy.get(registerButtonTextLocator).click();
-    cy.get
-    //cy.get(loading).should('not.exist');
-    cy.get(registerForm, { timeout: extendedDefaultTimeout }).should('be.visible');
-    
+    registerPage.registerForm().should('be.visible');
 
-    cy.get(registerPageTitleLocator).find('h3').should('be.visible');
-    cy.get(registerPageTitleLocator).find('h3').should('have.text', 'Start with a free\n14-day trial');
-    cy.get(registerPageTitleLocator).find('p').should('be.visible');
-    cy.get(registerPageTitleLocator).find('p').should('have.text', 'No credit card. No commitments.');
+    registerPage.registerFormHeader()
+      .should('be.visible')
+      .should('have.text', 'Start with a free\n14-day trial');
 
-    cy.get('.auth0-lock-input-email').find('.auth0-lock-input-wrap-with-icon').should('be.visible');
-    cy.get(emailInput).should('have.attr', 'placeholder', 'yours@example.com');
+    registerPage.registerFormDescription()
+      .should('be.visible')
+      .should('have.text', 'No credit card. No commitments.');
 
-    cy.get('.auth0-lock-input-password').find('.auth0-lock-input-wrap-with-icon').should('be.visible');
-    cy.get(passwordInput).should('have.attr', 'placeholder', 'your password');
+    registerPage.emailInputWrapper().should('be.visible');
+    registerPage.emailInput().should('have.attr', 'placeholder', 'yours@example.com');
 
-    cy.get(fNameInput).should('be.visible');
-    cy.get(fNameInput).should('have.attr', 'placeholder', 'First name');
-    cy.get(lNameInput).should('be.visible');
-    cy.get(lNameInput).should('have.attr', 'placeholder', 'Last name');
-    cy.get(companyInput).should('be.visible');
-    cy.get(companyInput).should('have.attr', 'placeholder', 'Company name');
-    cy.get(phoneInput).should('be.visible');
-    cy.get(phoneInput).should('have.attr', 'placeholder', 'Phone number');
+    registerPage.passwordInputWrapper().should('be.visible');
+    registerPage.passwordInput().should('have.attr', 'placeholder', 'your password');
 
-    cy.get(submitButton).should('be.visible');
-    cy.get(submitButton).should('have.text', 'Start your trial');
+    registerPage.firstNameInput()
+      .should('be.visible')
+      .should('have.attr', 'placeholder', 'First name');
+
+    registerPage.lastNameInput()
+      .should('be.visible')
+      .should('have.attr', 'placeholder', 'Last name');
+
+    registerPage.companyInput()
+      .should('be.visible')
+      .should('have.attr', 'placeholder', 'Company name');
+
+    registerPage.phoneInput()
+      .should('be.visible')
+      .should('have.attr', 'placeholder', 'Phone number');
+
+    registerPage.submitButton()
+      .should('be.visible')
+      .should('have.text', 'Start your trial');
 
   });
 
 
   it('Fill with correct data and submit Register new user form', function () {
-    cy.get(emailInput).type(randomTextWithNumbers(6) + "@test.ee");
-    cy.get(passwordInput).type(defaultPassword);
-    cy.get(fNameInput).type('TestName');
-    cy.get(lNameInput).type('TestSurname');
-    cy.get(companyInput).type('TestCompany');
-    cy.get(phoneInput).type(randomNumbers(10));
+    enterTextToInput(registerPage.emailInput(), randomTextWithNumbers(6) + "@test.ee");
+    enterTextToInput(registerPage.passwordInput(), defaultPassword);
+    enterTextToInput(registerPage.firstNameInput(), 'TestName');
+    enterTextToInput(registerPage.lastNameInput(), 'TestSurname');
+    enterTextToInput(registerPage.companyInput(), 'TestCompany');
+    enterTextToInput(registerPage.phoneInput(), randomNumbers(10));
+    registerPage.submitButton().click();
 
-    cy.get(submitButton).click();
-    cy.get(loading, { timeout: extendedDefaultTimeout }).should('not.exist');
-    cy.get(registerForm, { timeout: extendedDefaultTimeout }).should('not.exist');
+    registerPage.loading().should('not.exist');
+    registerPage.registerForm().should('not.exist');
 
-    cy.get('appcues-container[class*=ontop]', { timeout: extendedDefaultTimeout }).should('be.visible');
+    cy.get('appcues-container[class*=ontop]', { timeout: registerPage.regPageDefaultTimeout() }).should('be.visible');
 
   });
+
+  // TODO: need to solve problem with access to the inframe objects
+
+  // const getIframeDocument = () => {
+  //   return cy
+  //   .get('iframe')
+  //   .its('0.contentDocument').should('exist')
+  // }
+  
+  // const getIframeBody = () => {
+  //   return getIframeDocument()
+  //   .its('body').should('not.be.undefined')
+  //   .then(cy.wrap)
+  // }
+
+  // it('Pass questionary', function () {
+  //   getIframeBody().find('a').should('have.text','I am just looking around, I don\'t need any solution now').click;
+  //   cy.get('a[data-attrs-event*="dont_manufacture"]').should('be.visible').click;
+  //   cy.get('a[data-attrs-event*="revenue_prefer_not_toshare"]').should('be.visible').click;
+  //   cy.get('a[data-attrs-event*="welcome_accounting_neither"]').should('be.visible').click;
+  //   cy.get('a[data-attrs-event*="welcome_ecommerce-neither"]').should('be.visible').click;
+
+  //   cy.get('appcues-container[class*=ontop]', { timeout: registerPage.regPageDefaultTimeout() }).should('not.exist');
+
+  //   cy.get('span[aria-label="Close"]', { timeout: registerPage.regPageDefaultTimeout() }).should('be.visible').click;
+  // });
+
+  // it('Logout', function () {
+  //   cy.get('div.sc-hKFxyN').should('be.visible').click;
+  //   cy.get('#logout').should('be.visible').click;
+  //   cy.url().should('eq', 'https://katanamrp.com');
+
+  // });
+
 });
